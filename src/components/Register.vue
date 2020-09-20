@@ -34,7 +34,7 @@
     </div>
     <div class="c-wakalist">
       <div class="c-wakalist__ttl">
-        <h1>日本の和歌を登録する</h1>
+        <h1>すべての登録された和歌</h1>
       </div>
       <div class="c-wakalist__contents">
         <table>
@@ -98,7 +98,7 @@ export default {
             })
           }
           this.wakaList = wakaList;
-          console.log(this.dataList);
+          console.log(this.wakaList);
         }
       });
     }
