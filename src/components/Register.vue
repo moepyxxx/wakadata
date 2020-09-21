@@ -26,8 +26,8 @@
           <label for="makura">含まれる枕詞 ※カンマ区切りで入力。</label>
           <textarea name="makura" id="makura" cols="30" rows="10" v-model="waka.makura"></textarea>
         </div>
+        <p>収録されている歌集</p>
         <div class="c-register__contents_inner" v-for="book in bookList" :key="book.id">
-          <p>万葉集</p>
           <div class="c-radio">
             <label :for="book.identifykey">{{ book.name }}</label>
             <input type="radio" :id="book.identifykey" :name="book.name" :value="book.name" v-model="waka.book">
