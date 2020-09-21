@@ -10,6 +10,17 @@
             <p>語句を検索</p>
             <input type="text" v-model="keyword">
           </div>
+          <div class="search__contents_word_sub_range">
+            <p>（検索について）</p>
+            <div class="search__contents_word_sub_range_inner">
+              <label for="and">and検索</label>
+              <input type="radio" id="and" v-model="checkKeywordMethod" value="and" checked>
+            </div>
+            <div class="search__contents_word_sub_range_inner">
+              <label for="or">or検索</label>
+              <input type="radio" id="or" v-model="checkKeywordMethod" value="or">
+            </div>
+          </div>
           <div class="c-search__contents_word_sub">
             <p>チェックしてください</p>
             <div class="c-search__contents_word_sub_inner">
@@ -57,7 +68,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="waka in filterWakaList" :key="waka.id">
+            <tr v-for="waka in filterWakaList" :key="`result-${waka.id}`">
               <th>{{ waka.waka }}</th>
               <td>{{ waka.kana }}</td>
               <td>{{ waka.book }}</td>
@@ -76,13 +87,22 @@ export default {
     return {
       checkBooks: [],
       keyword: "",
-      wakaList: ""
+      checkKeywordMethod: "and",
+      wakaList: []
     }
   },
   computed: {
     filterWakaList() {
       this.showAllWakaData();
       const wakaList = [];
+      let searchKeyword = [];
+      if (this.keyword) {
+        if (this.keyword.replaceAll("　", " ").match(/ /)) {
+          searchKeyword = this.keyword.replaceAll("　", " ").split(' ');
+        } else {
+          searchKeyword = this.keyword.split();
+        }
+      }
       for(const i in this.wakaList) {
         const waka = this.wakaList[i];
         if (this.checkBooks) {
@@ -93,8 +113,19 @@ export default {
           });
         }
         if (this.keyword) {
-          if(waka.waka.indexOf(this.keyword) !== -1 || waka.kana.indexOf(this.keyword) !== -1) {
-            wakaList.push(waka);
+          if (this.checkKeywordMethod === "and") {
+            console.log('hey');
+          } else {
+            searchKeyword.forEach((value) => {
+              if(waka.waka.indexOf(value) !== -1 || waka.kana.indexOf(value) !== -1) {
+                for (let i = 0; i < wakaList.length; i++) {
+                  if (wakaList[i].id === waka.id) {
+                    return false;
+                  }
+                }
+                wakaList.push(waka);
+              }
+            });
           }
         }
       }

@@ -46,7 +46,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="waka in wakaList" :key="waka.id">
+            <tr v-for="waka in wakaList" :key="`list-${waka.id}`">
               <th>{{ waka.waka }}</th>
               <td>{{ waka.kana }}</td>
               <td>{{ waka.book }}</td>
