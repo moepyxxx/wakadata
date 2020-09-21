@@ -20,20 +20,13 @@
               <label for="or">or検索</label>
               <input type="radio" id="or" v-model="checkKeywordMethod" value="or">
             </div>
-          </div>
-          <div class="c-search__contents_word_sub">
-            <p>チェックしてください</p>
-            <div class="c-search__contents_word_sub_inner">
-              <label for="wordoption1">先頭</label>
-              <input type="checkbox" name="wordoption" id="wordoption1">
+            <div class="search__contents_word_sub_range_inner">
+              <label for="start">最初</label>
+              <input type="radio" id="start" v-model="checkKeywordMethod" value="start">
             </div>
-            <div class="c-search__contents_word_sub_inner">
-              <label for="wordoption2">初句</label>
-              <input type="checkbox" name="wordoption" id="wordoption2">
-            </div>
-            <div class="c-search__contents_word_sub_inner">
-              <label for="wordoption3">二句</label>
-              <input type="checkbox" name="wordoption" id="wordoption3">
+            <div class="search__contents_word_sub_range_inner">
+              <label for="end">最後</label>
+              <input type="radio" id="end" v-model="checkKeywordMethod" value="end">
             </div>
           </div>
           <div class="c-search__contents_word_sub">
@@ -54,6 +47,7 @@
         </div>
       </div>
     </div>
+    <hr>
     <div class="c-result">
       <div class="c-result__ttl">
         <h1>検索結果一覧</h1>
