@@ -40,6 +40,13 @@
               <input type="checkbox" :id="book.identifykey" v-model="checkBooks" :value="book.name">
             </div>
           </div>
+          <p>作者キーワードから探す</p>
+          <div class="c-search__contents_word_sub" v-for="(authorKeyword, index) in authorKeywordList" :key="`author-${index}`">
+            <div class="c-radio">
+              <label :for="`checkAuthorKeyword-${index}`">{{ authorKeyword }}</label>
+              <input type="checkbox" :id="`checkAuthorKeyword-${index}`" :value="authorKeyword" v-model="checkAuthorKeyword">
+            </div>
+          </div>
           <p>部立から探す</p>
           <div class="c-search__contents_word_sub">
             <div class="c-radio">
@@ -125,6 +132,7 @@ export default {
       keyword: "",
       checkAuthor: "",
       checkKeywordMethod: "and",
+      checkAuthorKeyword: [],
       wakaList: [],
       bookList: {},
     }
@@ -143,6 +151,19 @@ export default {
         }
       }
     },
+    authorKeywordList() {
+      let authorKeywordList = [];
+      for (const i in this.wakaList) {
+        for (const j in this.wakaList[i].authorKeyword) {
+          authorKeywordList.push(this.wakaList[i].authorKeyword[j]);
+        }
+      }
+      // 重複削除
+      authorKeywordList = authorKeywordList.filter((val, index, self) => {
+        return self.indexOf(val) === index;
+      });
+      return authorKeywordList;
+    },
     filterWakaList() {
 
       // すべてのデータを取得
@@ -150,7 +171,7 @@ export default {
       const wakaList = [];
 
       // 検索開始
-      for(const i in this.wakaList) {
+      for (const i in this.wakaList) {
 
         // 検索の結果フラグ
         let hitFlug = true;
@@ -178,6 +199,21 @@ export default {
           if (waka.author.indexOf(this.checkAuthor) == -1) {
             hitFlug = false;
           }
+        }
+
+        // 作者キーワードチェック
+        if (this.checkAuthorKeyword && hitFlug) {
+          this.checkAuthorKeyword.forEach((value) => {
+            let isAnyMatch = false;
+            for(const i in waka.authorKeyword) {
+              if (waka.authorKeyword[i] === value) {
+                isAnyMatch = true;
+              }
+            }
+            if (!isAnyMatch) {
+              hitFlug = false;
+            }
+          });
         }
 
         // キーワードチェック
@@ -309,7 +345,6 @@ export default {
           this.bookList = bookList;
         }
       });
-      console.log(this.bookList);
     },
   },
   created() {
