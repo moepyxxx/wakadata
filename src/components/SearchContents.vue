@@ -93,9 +93,13 @@ export default {
   },
   computed: {
     filterWakaList() {
+
+      // すべてのデータを取得
       this.showAllWakaData();
       const wakaList = [];
       let searchKeyword = [];
+
+      // キーワードを配列にする
       if (this.keyword) {
         if (this.keyword.replaceAll("　", " ").match(/ /)) {
           searchKeyword = this.keyword.replaceAll("　", " ").split(' ');
@@ -103,8 +107,14 @@ export default {
           searchKeyword = this.keyword.split();
         }
       }
+
+      // 検索開始
       for(const i in this.wakaList) {
+
+        // 検索する和歌を取得（順番に取得している）
         const waka = this.wakaList[i];
+
+        // 歌集チェック
         if (this.checkBooks) {
           this.checkBooks.forEach((value) => {
             if(waka.book.indexOf(value) !== -1) {
@@ -112,18 +122,37 @@ export default {
             }
           });
         }
+
+        // キーワードチェック
         if (this.keyword) {
+
+          // or検索の場合
           if (this.checkKeywordMethod === "and") {
-            console.log('hey');
+            let matchFlug = true;
+            searchKeyword.forEach((value) => {
+              if (waka.waka.indexOf(value) == -1 && waka.kana.indexOf(value) == -1) {
+                matchFlug = false;
+              }
+            });
+            if (matchFlug) {
+
+              // 配列の重複チェックを行って格納
+              let addFlug = this.checkDuplicate(wakaList, waka);
+              if (addFlug) {
+                wakaList.push(waka);
+              }
+            }
+
+          // or検索の場合
           } else {
             searchKeyword.forEach((value) => {
               if(waka.waka.indexOf(value) !== -1 || waka.kana.indexOf(value) !== -1) {
-                for (let i = 0; i < wakaList.length; i++) {
-                  if (wakaList[i].id === waka.id) {
-                    return false;
-                  }
+
+                // 配列の重複チェックを行って格納
+                let addFlug = this.checkDuplicate(wakaList, waka);
+                if (addFlug) {
+                  wakaList.push(waka);
                 }
-                wakaList.push(waka);
               }
             });
           }
@@ -133,6 +162,15 @@ export default {
     }
   },
   methods: {
+    checkDuplicate(list, waka) {
+      let addFlug = true;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === waka.id) {
+          addFlug = false;
+        }
+      }
+      return addFlug;
+    },
     showAllWakaData() {
       const database = firebase.database();
       const waka = "waka";
