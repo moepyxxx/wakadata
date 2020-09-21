@@ -111,50 +111,55 @@ export default {
       // 検索開始
       for(const i in this.wakaList) {
 
+        // 検索の結果フラグ
+        let hitFlug = true;
+
         // 検索する和歌を取得（順番に取得している）
         const waka = this.wakaList[i];
 
         // 歌集チェック
-        if (this.checkBooks) {
-          this.checkBooks.forEach((value) => {
-            if(waka.book.indexOf(value) !== -1) {
-              wakaList.push(waka);
-            }
-          });
+        if (hitFlug) {
+          if (this.checkBooks.length !== 0) {
+            this.checkBooks.forEach((value) => {
+              if(waka.book.indexOf(value) == -1) {
+                hitFlug = false;
+              }
+            });
+          }
         }
 
         // キーワードチェック
-        if (this.keyword) {
+        if (this.keyword && hitFlug) {
 
-          // or検索の場合
+          // and検索の場合
           if (this.checkKeywordMethod === "and") {
-            let matchFlug = true;
             searchKeyword.forEach((value) => {
               if (waka.waka.indexOf(value) == -1 && waka.kana.indexOf(value) == -1) {
-                matchFlug = false;
+                hitFlug = false;
               }
             });
-            if (matchFlug) {
-
-              // 配列の重複チェックを行って格納
-              let addFlug = this.checkDuplicate(wakaList, waka);
-              if (addFlug) {
-                wakaList.push(waka);
-              }
-            }
 
           // or検索の場合
           } else {
+            let isAnyMatch = false;
             searchKeyword.forEach((value) => {
               if(waka.waka.indexOf(value) !== -1 || waka.kana.indexOf(value) !== -1) {
-
-                // 配列の重複チェックを行って格納
-                let addFlug = this.checkDuplicate(wakaList, waka);
-                if (addFlug) {
-                  wakaList.push(waka);
-                }
+                isAnyMatch = true;
               }
             });
+            if (!isAnyMatch) {
+              hitFlug = false;
+            }
+          }
+        }
+
+        // 最終結果
+        if (hitFlug) {
+
+          // 配列の重複チェックを行って格納
+          let addFlug = this.checkDuplicate(wakaList, waka);
+          if (addFlug) {
+            wakaList.push(waka);
           }
         }
       }
