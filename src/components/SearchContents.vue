@@ -29,6 +29,10 @@
               <input type="radio" id="end" v-model="checkKeywordMethod" value="end">
             </div>
           </div>
+          <div class="c-search__contents_word_main">
+            <p>作者から検索</p>
+            <input type="text" v-model="checkAuthor">
+          </div>
           <p>和歌集から探す</p>
           <div class="c-search__contents_word_sub" v-for="book in bookList" :key="`search-${book.id}`">
             <div class="c-search__contents_word_sub_inner">
@@ -119,6 +123,7 @@ export default {
       checkSeason: "",
       checkType: "",
       keyword: "",
+      checkAuthor: "",
       checkKeywordMethod: "and",
       wakaList: [],
       bookList: {},
@@ -166,6 +171,13 @@ export default {
         // 季節チェック
         if (this.checkSeason && hitFlug) {
           hitFlug = this.checkInOrSearchMethod(this.checkSeason, waka.season);
+        }
+
+        // 作者チェック
+        if (this.checkAuthor && hitFlug) {
+          if (waka.author.indexOf(this.checkAuthor) == -1) {
+            hitFlug = false;
+          }
         }
 
         // キーワードチェック
