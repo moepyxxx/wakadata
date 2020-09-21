@@ -143,16 +143,6 @@ export default {
       // すべてのデータを取得
       this.showAllWakaData();
       const wakaList = [];
-      let searchKeyword = [];
-
-      // キーワードを配列にする
-      if (this.keyword) {
-        if (this.keyword.replaceAll("　", " ").match(/ /)) {
-          searchKeyword = this.keyword.replaceAll("　", " ").split(' ');
-        } else {
-          searchKeyword = this.keyword.split();
-        }
-      }
 
       // 検索開始
       for(const i in this.wakaList) {
@@ -183,6 +173,9 @@ export default {
 
           // and検索の場合
           if (this.checkKeywordMethod === "and") {
+
+            let searchKeyword = this.correctArrayDelimiterBlank(this.keyword);
+            
             searchKeyword.forEach((value) => {
               if (waka.main.indexOf(value) == -1 && waka.kana.indexOf(value) == -1) {
                 hitFlug = false;
@@ -190,7 +183,10 @@ export default {
             });
 
           // or検索の場合
-          } else {
+          } else if (this.checkKeywordMethod === "or") {
+
+            let searchKeyword = this.correctArrayDelimiterBlank(this.keyword);
+
             let isAnyMatch = false;
             searchKeyword.forEach((value) => {
               if(waka.main.indexOf(value) !== -1 || waka.kana.indexOf(value) !== -1) {
@@ -198,6 +194,20 @@ export default {
               }
             });
             if (!isAnyMatch) {
+              hitFlug = false;
+            }
+
+          // 先頭一致検索の場合
+          } else if (this.checkKeywordMethod === "start") {
+            let searchKeyword = this.keyword;
+            if (!waka.main.startsWith(searchKeyword) && !waka.kana.startsWith(searchKeyword)) {
+              hitFlug = false;
+            }
+
+          // 後方一致検索の場合
+          } else if (this.checkKeywordMethod === "end") {
+            let searchKeyword = this.keyword;
+            if (!waka.main.endsWith(searchKeyword) && !waka.kana.endsWith(searchKeyword)) {
               hitFlug = false;
             }
           }
@@ -217,6 +227,13 @@ export default {
     }
   },
   methods: {
+    correctArrayDelimiterBlank(keyword) {
+      if (keyword.replaceAll("　", " ").match(/ /)) {
+        return keyword.replaceAll("　", " ").split(' ');
+      } else {
+        return keyword.split();
+      }
+    },
     checkInOrSearchMethod(checkList, checkKey) {
       if (!Array.isArray(checkList)) {
         if(checkList.indexOf(checkKey) !== -1) {
