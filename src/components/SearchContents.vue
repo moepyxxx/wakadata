@@ -47,6 +47,13 @@
               <input type="checkbox" :id="`checkAuthorKeyword-${index}`" :value="authorKeyword" v-model="checkAuthorKeyword">
             </div>
           </div>
+          <p>枕詞から探す</p>
+          <div class="c-search__contents_word_sub" v-for="(makura, index) in makuraList" :key="`makura-${index}`">
+            <div class="c-radio">
+              <label :for="`checkMakura-${index}`">{{ makura }}</label>
+              <input type="radio" :id="`checkMakura-${index}`" :value="makura" v-model="checkMakura">
+            </div>
+          </div>
           <p>部立から探す</p>
           <div class="c-search__contents_word_sub">
             <div class="c-radio">
@@ -133,6 +140,7 @@ export default {
       checkAuthor: "",
       checkKeywordMethod: "and",
       checkAuthorKeyword: [],
+      checkMakura: "",
       wakaList: [],
       bookList: {},
     }
@@ -154,8 +162,10 @@ export default {
     authorKeywordList() {
       let authorKeywordList = [];
       for (const i in this.wakaList) {
-        for (const j in this.wakaList[i].authorKeyword) {
-          authorKeywordList.push(this.wakaList[i].authorKeyword[j]);
+        if (this.wakaList[i].authorKeyword.length > 0 && this.wakaList[i].authorKeyword[0] !== "") {
+          for (const j in this.wakaList[i].authorKeyword) {
+            authorKeywordList.push(this.wakaList[i].authorKeyword[j]);
+          }
         }
       }
       // 重複削除
@@ -163,6 +173,21 @@ export default {
         return self.indexOf(val) === index;
       });
       return authorKeywordList;
+    },
+    makuraList() {
+      let makurakotobaList = [];
+      for (const i in this.wakaList) {
+        if (this.wakaList[i].makura.length > 0 && this.wakaList[i].makura[0] !== "") {
+          for (const j in this.wakaList[i].makura) {
+            makurakotobaList.push(this.wakaList[i].makura[j]);
+          }
+        }
+      }
+      // 重複削除
+      makurakotobaList = makurakotobaList.filter((val, index, self) => {
+        return self.indexOf(val) === index;
+      });
+      return makurakotobaList;
     },
     filterWakaList() {
 
@@ -214,6 +239,19 @@ export default {
               hitFlug = false;
             }
           });
+        }
+
+        // 枕詞チェック
+        if (this.checkMakura && hitFlug) {
+          let isAnyMatch = false;
+          for(const i in waka.makura) {
+            if (waka.makura[i] === this.checkMakura) {
+              isAnyMatch = true;
+            }
+          }
+          if (!isAnyMatch) {
+            hitFlug = false;
+          }
         }
 
         // キーワードチェック
