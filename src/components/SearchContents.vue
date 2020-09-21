@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="c-search">
+    <!--<div class="c-search">
       <div class="c-search__ttl">
         <h1>日本の和歌検索データベース</h1>
       </div>
@@ -124,7 +124,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 

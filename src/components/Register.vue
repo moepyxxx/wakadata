@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hr>
+    <!--<hr>
     <div class="c-register">
       <div class="c-register__ttl">
         <h1>日本の和歌を登録する</h1>
@@ -124,7 +124,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
