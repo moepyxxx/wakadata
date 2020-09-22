@@ -21,3 +21,10 @@ p {
 .right {
   text-align: right;
 }
+
+.el-container {
+  max-width: 1000px;
+  padding: 50px;
+  margin: 0 auto;
+  display: block !important;
+}

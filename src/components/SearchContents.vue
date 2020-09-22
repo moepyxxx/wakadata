@@ -117,6 +117,7 @@
 
 <script>
 import firebase from 'firebase'
+
 export default {
   data() {
     return {
@@ -382,16 +383,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .el-form {
   margin: 30px 0;
-}
-
-.el-main {
-  max-width: 1000px;
-  padding: 50px;
-  margin: 0 auto;
 }
 
 .el-tabs__header {
