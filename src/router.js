@@ -28,10 +28,6 @@ export default new Router ({
         default: List
       },
     },
-    // {
-    //   path: "/vegetable/:name",
-    //   component: VegetableDetail 
-    // },
     {
       path: '*',
       redirect: "/"

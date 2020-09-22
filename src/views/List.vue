@@ -1,20 +1,29 @@
 <template>
   <div>
-    <AllList />
+    <Header activeIndex="2" />
+    <el-main>
+      <AllList />
+    </el-main>
   </div>
 </template>
 
 <script>
 import AllList from '../components/AllList.vue'
+import Header from '../components/Header.vue'
 
 export default {
   components: {
-    AllList
-  }
+    AllList,
+    Header
+  },
+  data() {
+    return {
+      activeIndex: '2'
+    };
+  },
 }
 </script>
 
 <style lang="scss">
 @import "../assets/style.scss";
-
 </style>
