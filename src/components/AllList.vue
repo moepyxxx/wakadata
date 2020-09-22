@@ -58,9 +58,12 @@ export default {
       return function (array) {
         if (array.length > 0 && array[0] !== "") {
           let str = "";
-          array.forEach((value) => {
-            str = str + value + '、';
-          });
+          for (let i = 0; i < array.length; i++) {
+            str = str + array[i];
+            if (i !== array.length - 1) {
+              str = str + '、';
+            }
+          }
           return str;
         } else {
           return '';
@@ -73,6 +76,7 @@ export default {
 
       for (const i in this.wakaList) {
         const waka = this.wakaList[i];
+        waka.authorKeyword = this.correctArrayToList(waka.authorKeyword);
         wakaList.push(waka);
       }
       return wakaList;

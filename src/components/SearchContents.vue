@@ -138,9 +138,12 @@ export default {
       return function (array) {
         if (array.length > 0 && array[0] !== "") {
           let str = "";
-          array.forEach((value) => {
-            str = str + value + '、';
-          });
+          for (let i = 0; i < array.length; i++) {
+            str = str + array[i];
+            if (i !== array.length - 1) {
+              str = str + '、';
+            }
+          }
           return str;
         } else {
           return '';
@@ -295,6 +298,7 @@ export default {
           // 配列の重複チェックを行って格納
           let addFlug = this.checkDuplicate(wakaList, waka);
           if (addFlug) {
+            waka.authorKeyword = this.correctArrayToList(waka.authorKeyword);
             wakaList.push(waka);
           }
         }
