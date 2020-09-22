@@ -1,23 +1,24 @@
 <template>
   <div id="app">
-    <SearchContents />
-    <Register />
+    <el-container>
+      <Header />
+      <el-main>
+        <router-view />
+      </el-main>
+      <Footer />
+    </el-container>
   </div>
 </template>
 
 <script>
-import Register from './components/Register.vue'
-import SearchContents from './components/SearchContents.vue'
+import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    SearchContents,
-    Register
+    Header,
+    Footer
   }
 }
 </script>
-
-<style>
-
-</style>

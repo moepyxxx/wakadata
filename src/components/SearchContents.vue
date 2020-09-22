@@ -1,130 +1,117 @@
 <template>
   <div>
-    <!--<div class="c-search">
-      <div class="c-search__ttl">
-        <h1>日本の和歌検索データベース</h1>
-      </div>
-      <div class="c-search__contents">
-        <div class="c-search__contents_word">
-          <div class="c-search__contents_word_main">
-            <p>語句を検索</p>
-            <input type="text" v-model="keyword">
-          </div>
-          <div class="search__contents_word_sub_range">
-            <p>（検索について）</p>
-            <div class="search__contents_word_sub_range_inner">
-              <label for="and">and検索</label>
-              <input type="radio" id="and" v-model="checkKeywordMethod" value="and" checked>
-            </div>
-            <div class="search__contents_word_sub_range_inner">
-              <label for="or">or検索</label>
-              <input type="radio" id="or" v-model="checkKeywordMethod" value="or">
-            </div>
-            <div class="search__contents_word_sub_range_inner">
-              <label for="start">最初</label>
-              <input type="radio" id="start" v-model="checkKeywordMethod" value="start">
-            </div>
-            <div class="search__contents_word_sub_range_inner">
-              <label for="end">最後</label>
-              <input type="radio" id="end" v-model="checkKeywordMethod" value="end">
-            </div>
-          </div>
-          <div class="c-search__contents_word_main">
-            <p>作者から検索</p>
-            <input type="text" v-model="checkAuthor">
-          </div>
-          <p>和歌集から探す</p>
-          <div class="c-search__contents_word_sub" v-for="book in bookList" :key="`search-${book.id}`">
-            <div class="c-search__contents_word_sub_inner">
-              <label :for="book.identifykey">{{ book.name }}</label>
-              <input type="checkbox" :id="book.identifykey" v-model="checkBooks" :value="book.name">
-            </div>
-          </div>
-          <p>作者キーワードから探す</p>
-          <div class="c-search__contents_word_sub" v-for="(authorKeyword, index) in authorKeywordList" :key="`author-${index}`">
-            <div class="c-radio">
-              <label :for="`checkAuthorKeyword-${index}`">{{ authorKeyword }}</label>
-              <input type="checkbox" :id="`checkAuthorKeyword-${index}`" :value="authorKeyword" v-model="checkAuthorKeyword">
-            </div>
-          </div>
-          <p>枕詞から探す</p>
-          <div class="c-search__contents_word_sub" v-for="(makura, index) in makuraList" :key="`makura-${index}`">
-            <div class="c-radio">
-              <label :for="`checkMakura-${index}`">{{ makura }}</label>
-              <input type="radio" :id="`checkMakura-${index}`" :value="makura" v-model="checkMakura">
-            </div>
-          </div>
-          <p>部立から探す</p>
-          <div class="c-search__contents_word_sub">
-            <div class="c-radio">
-              <label for="zouka">雑歌</label>
-              <input type="radio" id="zouka" value="雑歌" v-model="checkType">
-            </div>
-            <div class="c-radio">
-              <label for="soumonka">相聞歌</label>
-              <input type="radio" id="soumonka" value="相聞歌" v-model="checkType">
-            </div>
-            <div class="c-radio">
-              <label for="banka">挽歌</label>
-              <input type="radio" id="banka" value="挽歌" v-model="checkType">
-            </div>
-          </div>
-          <p>季節から探す</p>
-          <div class="c-search__contents_word_sub">
-            <div class="c-radio">
-              <label for="spring">春</label>
-              <input type="radio" id="spring" value="春" v-model="checkSeason">
-            </div>
-            <div class="c-radio">
-              <label for="summer">夏</label>
-              <input type="radio" id="summer" value="夏" v-model="checkSeason">
-            </div>
-            <div class="c-radio">
-              <label for="authmn">秋</label>
-              <input type="radio" id="authmn" value="秋" v-model="checkSeason">
-            </div>
-            <div class="c-radio">
-              <label for="winter">冬</label>
-              <input type="radio" id="winter" value="冬" v-model="checkSeason">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr>
-    <div class="c-result">
-      <div class="c-result__ttl">
-        <h1>検索結果一覧</h1>
-      </div>
-      <div class="c-result__contents">
-        <table>
-          <thead>
-            <tr>
-              <th>和歌</th>
-              <td>和歌（かな）</td>
-              <td>作者</td>
-              <td>作者キーワード</td>
-              <td>収録歌集</td>
-              <td>部立</td>
-              <td>季節</td>
-              <td>枕詞</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="waka in filterWakaList" :key="`result-${waka.id}`">
-              <th>{{ waka.main }}</th>
-              <td>{{ waka.kana }}</td>
-              <td>{{ waka.author }}</td>
-              <td>{{ correctArrayToList(waka.authorKeyword) }}</td>
-              <td>{{ waka.book }}</td>
-              <td>{{ waka.type }}</td>
-              <td>{{ waka.season }}</td>
-              <td>{{ correctArrayToList(waka.makura) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>-->
+    <el-form ref="form" label-width="120px">
+      <el-tabs type="card">
+        <el-tab-pane label="キーワードから自由に探す">
+          <el-form-item label="キーワード">
+            <el-input v-model="keyword"></el-input>
+          </el-form-item>
+          <el-form-item label="検索方法">
+            <el-select v-model="checkKeywordMethod" placeholder="選択する">
+              <el-option label="and検索" value="and"></el-option>
+              <el-option label="or検索" value="or"></el-option>
+              <el-option label="先頭一致" value="start"></el-option>
+              <el-option label="後方一致" value="end"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-tab-pane>
+        <el-tab-pane label="作者から探す">
+          <el-form-item label="作者">
+            <el-input v-model="checkAuthor"></el-input>
+          </el-form-item>
+          <el-form-item label="作者キーワード">
+            <el-checkbox-group v-model="checkAuthorKeyword">
+              <el-checkbox
+                v-for="(authorKeyword, index) in authorKeywordList"
+                :key="`author-${index}`"
+                :label="authorKeyword"
+                :value="authorKeyword"
+                name="authorKeyword">
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-tab-pane>
+        <el-tab-pane label="その他から探す">
+          <el-form-item label="収録歌集">
+            <el-checkbox-group v-model="checkBooks">
+              <el-checkbox
+                v-for="book in bookList"
+                :key="`search-${book.identifykey}`"
+                :label="book.name"
+                :value="book.identifykey">
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="枕詞から探す">
+            <el-checkbox-group v-model="checkMakura">
+              <el-checkbox-button
+                v-for="(makura, index) in makuraList"
+                :key="`makura-${index}`"
+                :id="`checkMakura-${index}`"
+                :label="makura"
+                :value="makura">
+              </el-checkbox-button>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="部立から探す">
+            <el-checkbox-group v-model="checkType">
+              <el-checkbox-button label="雑歌" value="雑歌">雑歌</el-checkbox-button>
+              <el-checkbox-button label="相聞歌" value="相聞歌">相聞歌</el-checkbox-button>
+              <el-checkbox-button label="挽歌" value="挽歌">挽歌</el-checkbox-button>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="季節から探す">
+            <el-checkbox-group v-model="checkSeason">
+              <el-checkbox-button label="春"></el-checkbox-button>
+              <el-checkbox-button label="夏"></el-checkbox-button>
+              <el-checkbox-button label="秋"></el-checkbox-button>
+              <el-checkbox-button label="冬"></el-checkbox-button>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-tab-pane>
+      </el-tabs>
+    </el-form>
+    <el-table
+      :data="filterWakaList"
+      stripe
+      style="width: 100%">
+      <el-table-column
+        fixed
+        prop="main"
+        label="和歌"
+        width="300">
+      </el-table-column>
+      <el-table-column
+        prop="kana"
+        label="和歌（かな）"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        prop="author"
+        label="作者"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="authorKeyword"
+        label="作者キーワード"
+        width="130">
+      </el-table-column>
+      <el-table-column
+        prop="book"
+        label="収録歌集"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="type"
+        label="部立"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="season"
+        label="季節"
+        width="50">
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -134,13 +121,13 @@ export default {
   data() {
     return {
       checkBooks: [],
-      checkSeason: "",
-      checkType: "",
+      checkSeason: [],
+      checkType: [],
       keyword: "",
       checkAuthor: "",
       checkKeywordMethod: "and",
       checkAuthorKeyword: [],
-      checkMakura: "",
+      checkMakura: [],
       wakaList: [],
       bookList: {},
     }
@@ -192,7 +179,7 @@ export default {
     filterWakaList() {
 
       // すべてのデータを取得
-      this.showAllWakaData();
+      this.getAllWakaData();
       const wakaList = [];
 
       // 検索開始
@@ -210,12 +197,12 @@ export default {
         }
 
         // 部立チェック
-        if (this.checkType && hitFlug) {
+        if (this.checkType.length && hitFlug) {
           hitFlug = this.checkInOrSearchMethod(this.checkType, waka.type);
         }
 
         // 季節チェック
-        if (this.checkSeason && hitFlug) {
+        if (this.checkSeason.length && hitFlug) {
           hitFlug = this.checkInOrSearchMethod(this.checkSeason, waka.season);
         }
 
@@ -242,16 +229,18 @@ export default {
         }
 
         // 枕詞チェック
-        if (this.checkMakura && hitFlug) {
-          let isAnyMatch = false;
-          for(const i in waka.makura) {
-            if (waka.makura[i] === this.checkMakura) {
-              isAnyMatch = true;
+        if (this.checkMakura.length && hitFlug) {
+          this.checkMakura.forEach((value) => {
+            let isAnyMatch = false;
+            for(const i in waka.makura) {
+              if (waka.makura[i] === value) {
+                isAnyMatch = true;
+              }
             }
-          }
-          if (!isAnyMatch) {
-            hitFlug = false;
-          }
+            if (!isAnyMatch) {
+              hitFlug = false;
+            }
+          });
         }
 
         // キーワードチェック
@@ -322,7 +311,7 @@ export default {
     },
     checkInOrSearchMethod(checkList, checkKey) {
       if (!Array.isArray(checkList)) {
-        if(checkList.indexOf(checkKey) !== -1) {
+        if(checkList === checkKey) {
           return true;
         } else {
           return false;
@@ -350,7 +339,7 @@ export default {
       }
       return addFlug;
     },
-    showAllWakaData() {
+    getAllWakaData() {
       const database = firebase.database();
       const waka = "waka";
       database.ref(waka).on('value', (data) => {
@@ -367,7 +356,7 @@ export default {
         }
       });
     },
-    showAllBookData() {
+    getAllBookData() {
       const database = firebase.database();
       const book = "book";
       database.ref(book).on('value', (data) => {
@@ -386,11 +375,27 @@ export default {
     },
   },
   created() {
-    this.showAllBookData();
+    this.getAllBookData();
+    // 終わったら消す
+    this.getAllWakaData();
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+
+.el-form {
+  margin: 30px 0;
+}
+
+.el-main {
+  max-width: 1000px;
+  padding: 50px;
+  margin: 0 auto;
+}
+
+.el-tabs__header {
+  margin-bottom: 30px;
+}
 
 </style>
