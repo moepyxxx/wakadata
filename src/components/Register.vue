@@ -1,130 +1,85 @@
 <template>
   <div>
-    <!--<hr>
-    <div class="c-register">
-      <div class="c-register__ttl">
-        <h1>日本の和歌を登録する</h1>
+    <el-form ref="form" label-width="120px">
+      <el-form-item label="和歌【必須】">
+        <el-input v-model="waka.main"></el-input>
+      </el-form-item>
+      <el-form-item label="かな【必須】">
+        <el-input v-model="waka.kana"></el-input>
+      </el-form-item>
+      <el-form-item label="枕詞">
+        <el-input v-model="waka.makura"></el-input>
+      </el-form-item>
+      <el-form-item label="作者【必須】">
+        <span class="annotation">※不明の場合、詠み人知らずで統一すること。</span>
+        <el-input v-model="waka.author"></el-input>
+      </el-form-item>
+      <el-form-item label="作者キーワード">
+        <span class="annotation">※キーワードをカンマ区切りで入力。 例）宮廷歌人,天皇,貴族,防人 等</span>
+        <el-input v-model="waka.authorKeyword"></el-input>
+      </el-form-item>
+      <el-form-item label="歌集【必須】">
+        <el-radio-group v-model="waka.book">
+          <el-radio
+            v-for="book in bookList"
+            :key="`search-${book.identifykey}`"
+            :label="book.name"
+            :value="book.identifykey">
+          </el-radio>
+        </el-radio-group>
+        <el-row class="register-book">
+          <p class="register-book_annotation">見当たらない場合は、新しい和歌集を追加しましょう →</p>
+          <el-button type="primary" icon="el-icon-edit" circle @click="showBookRegisterMenu = true"></el-button>
+        </el-row>
+      </el-form-item>
+      <el-form-item label="部立【必須】">
+        <el-radio-group v-model="waka.type">
+          <el-radio label="雑歌" value="雑歌">雑歌</el-radio>
+          <el-radio label="相聞歌" value="相聞歌">相聞歌</el-radio>
+          <el-radio label="挽歌" value="挽歌">挽歌</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="季節【必須】">
+        <el-radio-group v-model="waka.season">
+          <el-radio label="春"></el-radio>
+          <el-radio label="夏"></el-radio>
+          <el-radio label="秋"></el-radio>
+          <el-radio label="冬"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div class="center register-submit">
+        <p>必須項目はすべて入力されていないと登録されないので、気をつけて。</p>
+        <el-button @click="showConfirmRemoveDraft = true">一度クリアする</el-button>
+        <el-button type="primary" @click="registerWaka">和歌を登録する</el-button>
       </div>
-      <div class="c-register__contents">
-        <div class="c-register__contents_inner">
-          <label for="main">和歌</label>
-          <input type="text" name="main" id="main" v-model="waka.main">
-        </div>
-        <div class="c-register__contents_inner">
-          <label for="kana">和歌（ひらがな）</label>
-          <input type="text" name="kana" id="kana" v-model="waka.kana">
-        </div>
-        <div class="c-register__contents_inner">
-          <label for="author">作者</label>
-          <input type="text" name="author" id="author" v-model="waka.author">
-        </div>
-        <div class="c-register__contents_inner">
-          <label for="authorKeyword">作者キーワード ※カンマ区切りで入力。</label>
-          <textarea name="authorKeyword" id="authorKeyword" cols="30" rows="10" v-model="waka.authorKeyword"></textarea>
-        </div>
-        <div class="c-register__contents_inner">
-          <label for="makura">含まれる枕詞 ※カンマ区切りで入力。</label>
-          <textarea name="makura" id="makura" cols="30" rows="10" v-model="waka.makura"></textarea>
-        </div>
-        <p>収録されている歌集</p>
-        <div class="c-register__contents_inner" v-for="book in bookList" :key="book.id">
-          <div class="c-radio">
-            <label :for="book.identifykey">{{ book.name }}</label>
-            <input type="radio" :id="book.identifykey" :name="book.name" :value="book.name" v-model="waka.book">
-          </div>
-        </div>
-        <div class="c-register__contents_inner">
-          <p>部立</p>
-          <div class="c-radio">
-            <label for="zouka">雑歌</label>
-            <input type="radio" id="zouka" value="雑歌" v-model="waka.type">
-          </div>
-          <div class="c-radio">
-            <label for="soumonka">相聞歌</label>
-            <input type="radio" id="soumonka" value="相聞歌" v-model="waka.type">
-          </div>
-          <div class="c-radio">
-            <label for="banka">挽歌</label>
-            <input type="radio" id="banka" value="挽歌" v-model="waka.type">
-          </div>
-        </div>
-        <div class="c-register__contents_inner">
-          <p>季節</p>
-          <div class="c-radio">
-            <label for="spring">春</label>
-            <input type="radio" id="spring" value="春" v-model="waka.season">
-          </div>
-          <div class="c-radio">
-            <label for="summer">夏</label>
-            <input type="radio" id="summer" value="夏" v-model="waka.season">
-          </div>
-          <div class="c-radio">
-            <label for="authmn">秋</label>
-            <input type="radio" id="authmn" value="秋" v-model="waka.season">
-          </div>
-          <div class="c-radio">
-            <label for="winter">冬</label>
-            <input type="radio" id="winter" value="冬" v-model="waka.season">
-          </div>
-        </div>
-        <div class="c-register__contents_button">
-          <button @click="registerWaka">登録する</button>
-        </div>
-      </div>
-    </div>
-    <hr>
-    <div class="c-registerbook">
-      <div class="c-registerbook__ttl">
-        <h1>歌集を登録する</h1>
-      </div>
-      <div class="c-registerbook__contents">
-        <div class="c-registerbook__contents_inner">
-          <label for="registerBookName">歌集の名前を入力してください</label>
-          <input type="text" name="registerBookName" id="registerBookName" v-model="bookToRegister.name">
-        </div>
-        <div class="c-registerbook__contents_inner">
-          <label for="registerBookKey">歌集の名前（英語：クラス・id識別のため）を入力してください</label>
-          <input type="text" name="registerBookKey" id="registerBookKey" v-model="bookToRegister.identifykey">
-        </div>
-        <div class="c-registerbook__contents_button">
-          <button @click="registerBook">登録する</button>
-        </div>
-      </div>
-    </div>
-    <hr>
-    <div class="c-wakalist">
-      <div class="c-wakalist__ttl">
-        <h1>すべての登録された和歌</h1>
-      </div>
-      <div class="c-wakalist__contents">
-        <table>
-          <thead>
-            <tr>
-              <th>和歌</th>
-              <td>和歌（かな）</td>
-              <td>作者</td>
-              <td>作者キーワード</td>
-              <td>収録歌集</td>
-              <td>部立</td>
-              <td>季節</td>
-              <td>枕詞</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="waka in wakaList" :key="`list-${waka.id}`">
-              <th>{{ waka.main }}</th>
-              <td>{{ waka.kana }}</td>
-              <td>{{ waka.author }}</td>
-              <td>{{ correctArrayToList(waka.authorKeyword) }}</td>
-              <td>{{ waka.book }}</td>
-              <td>{{ waka.type }}</td>
-              <td>{{ waka.season }}</td>
-              <td>{{ correctArrayToList(waka.makura) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>-->
+    </el-form>
+    <el-dialog
+      title="新しい和歌集の登録"
+      :visible.sync="showBookRegisterMenu"
+      width="50%">
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="和歌集の名前">
+          <el-input v-model="bookToRegister.name"></el-input>
+        </el-form-item>
+        <el-form-item label="識別キー">
+          <el-input v-model="bookToRegister.identifykey"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showBookRegisterMenu = false">やめる</el-button>
+        <el-button type="primary" @click="registerBook">登録する</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="書きかけの内容をクリアして良いですか？"
+      :visible.sync="showConfirmRemoveDraft"
+      width="50%">
+      <p>もう戻せないので、必ず確認してください。</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showConfirmRemoveDraft = false">やっぱやめる</el-button>
+        <el-button type="warning" @click="removeDraft">クリアする</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -138,33 +93,20 @@ export default {
         main : "",
         kana : "",
         author : "",
-        authorKeyword : [],
+        authorKeyword : "",
         book : "",
         type : "",
         season : "",
         makura : ""
       },
+      showBookRegisterMenu : false,
+      showConfirmRemoveDraft : false,
       bookToRegister: {
         name : "",
         identifykey : ""
       },
+      wakaList : {},
       bookList : {},
-      wakaList : {}
-    }
-  },
-  computed: {
-    correctArrayToList() {
-      return function (array) {
-        if (array.length > 0 && array[0] !== "") {
-          let str = "";
-          array.forEach((value) => {
-            str = str + value + '、';
-          });
-          return str;
-        } else {
-          return '';
-        }
-      }
     }
   },
   methods: {
@@ -172,16 +114,47 @@ export default {
       const database = firebase.database();
       const waka = "waka";
 
-      database.ref(waka).push({
-        main: this.waka.main,
-        kana: this.waka.kana,
-        author: this.waka.author,
-        authorKeyword: this.waka.authorKeyword.split(','),
-        book: this.waka.book,
-        type: this.waka.type,
-        season: this.waka.season,
-        makura: this.waka.makura.split(','),
-      });
+      let successFlug = false;
+
+      if (
+        this.waka.main &&
+        this.waka.kana &&
+        this.waka.author &&
+        this.waka.book &&
+        this.waka.type &&
+        this.waka.season
+      ) {
+
+        database.ref(waka).push({
+          main: this.waka.main,
+          kana: this.waka.kana,
+          author: this.waka.author,
+          authorKeyword: this.waka.authorKeyword.split(','),
+          book: this.waka.book,
+          type: this.waka.type,
+          season: this.waka.season,
+          makura: this.waka.makura.split(','),
+        });
+        this.waka.main = "";
+        this.waka.kana = "";
+        this.waka.author = "";
+        this.waka.authorKeyword = "";
+        this.waka.book = "";
+        this.waka.type = "";
+        this.waka.season = "";
+        this.waka.makura = "";
+
+        successFlug = true;
+
+      }
+
+      if (successFlug) {
+        this.showSuccessMessage('和歌の登録');
+      } else {
+        this.showErrorMessage('和歌の登録');
+      }
+    },
+    removeDraft() {
       this.waka.main = "";
       this.waka.kana = "";
       this.waka.author = "";
@@ -190,25 +163,12 @@ export default {
       this.waka.type = "";
       this.waka.season = "";
       this.waka.makura = "";
+
+      this.showConfirmRemoveDraft = false;
+
+      this.showWarningMessage('すべての下書きをクリアしました。');
     },
-    showAllWakaData() {
-      const database = firebase.database();
-      const waka = "waka";
-      database.ref(waka).on('value', (data) => {
-        if (data) {
-          const wakaList = data.val();
-          let list = [];
-          if(wakaList != null) {
-            Object.keys(wakaList).forEach((val) => {
-              wakaList[val].id = val;
-              list.push(wakaList[val]);
-            })
-          }
-          this.wakaList = wakaList;
-        }
-      });
-    },
-    showAllBookData() {
+    getAllBookData() {
       const database = firebase.database();
       const book = "book";
       database.ref(book).on('value', (data) => {
@@ -226,19 +186,47 @@ export default {
       });
     },
     registerBook() {
-      const database = firebase.database();
-      const book = "book";
-      database.ref(book).push({
-        name: this.bookToRegister.name,
-        identifykey: this.bookToRegister.identifykey
-      });
+      let successFlug = false;
+      if (this.bookToRegister.name && this.bookToRegister.identifykey) {
+        const database = firebase.database();
+        const book = "book";
+        database.ref(book).push({
+          name: this.bookToRegister.name,
+          identifykey: this.bookToRegister.identifykey
+        });
+        successFlug = true;
+      }
       this.bookToRegister.name = "";
       this.bookToRegister.identifykey = "";
-    }
+      this.showBookRegisterMenu = false;
+
+      if (successFlug) {
+        this.showSuccessMessage('本の登録');
+      } else {
+        this.showErrorMessage('本の登録');
+      }
+    },
+    showSuccessMessage(message) {
+      this.$message({
+        message: message + 'に成功しました。よかったね！',
+        type: 'success'
+      });
+    },
+    showErrorMessage(message) {
+      this.$message({
+        message: message + 'に失敗しました。残念、必須は入力してね！',
+        type: 'error'
+      });
+    },
+    showWarningMessage(message) {
+      this.$message({
+        message: message,
+        type: 'warning'
+      });
+    },
   },
   created() {
-    this.showAllWakaData();
-    this.showAllBookData();
+    this.getAllBookData();
   }
 }
 </script>

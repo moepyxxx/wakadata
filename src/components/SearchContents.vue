@@ -382,15 +382,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-.el-form {
-  margin: 30px 0;
-}
-
-.el-tabs__header {
-  margin-bottom: 30px;
-}
-
-</style>

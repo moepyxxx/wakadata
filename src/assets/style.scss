@@ -28,3 +28,38 @@ p {
   margin: 0 auto;
   display: block !important;
 }
+
+.el-form {
+  margin: 30px 0;
+}
+
+.el-tabs__header {
+  margin-bottom: 30px;
+}
+
+.annotation {
+  font-size: 12px;
+  color: #C0C4CC;
+  display: block;
+}
+
+.required {
+  font-size: 12px;
+  color: #F56C6C;
+  display: block;
+}
+
+.register-book {
+  text-align: right;
+  &_annotation {
+    display: inline-block;
+    padding-right: 10px;
+  }
+  .el-button.is-circle {
+    padding: 8px;
+  }
+}
+
+.register-submit {
+  padding-top: 30px;
+}
