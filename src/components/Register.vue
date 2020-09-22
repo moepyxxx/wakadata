@@ -32,14 +32,14 @@
           <el-button type="primary" icon="el-icon-edit" circle @click="showBookRegisterMenu = true"></el-button>
         </el-row>
       </el-form-item>
-      <el-form-item label="部立【必須】">
+      <el-form-item label="部立">
         <el-radio-group v-model="waka.type">
           <el-radio label="雑歌" value="雑歌">雑歌</el-radio>
           <el-radio label="相聞歌" value="相聞歌">相聞歌</el-radio>
           <el-radio label="挽歌" value="挽歌">挽歌</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="季節【必須】">
+      <el-form-item label="季節">
         <el-radio-group v-model="waka.season">
           <el-radio label="春"></el-radio>
           <el-radio label="夏"></el-radio>
@@ -120,9 +120,7 @@ export default {
         this.waka.main &&
         this.waka.kana &&
         this.waka.author &&
-        this.waka.book &&
-        this.waka.type &&
-        this.waka.season
+        this.waka.book
       ) {
 
         database.ref(waka).push({
