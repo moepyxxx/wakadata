@@ -298,7 +298,10 @@ export default {
           // 配列の重複チェックを行って格納
           let addFlug = this.checkDuplicate(wakaList, waka);
           if (addFlug) {
-            waka.authorKeyword = this.correctArrayToList(waka.authorKeyword);
+
+            // [todo] authorKeywordList との衝突避けたい
+            // waka.authorKeyword = this.correctArrayToList(waka.authorKeyword);
+
             wakaList.push(waka);
           }
         }
@@ -379,10 +382,5 @@ export default {
       });
     },
   },
-  created() {
-    this.getAllBookData();
-    // 終わったら消す
-    this.getAllWakaData();
-  }
 }
 </script>
