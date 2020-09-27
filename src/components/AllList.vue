@@ -45,15 +45,12 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  data() {
-    return {
-      wakaList: [],
-    }
-  },
   computed: {
+    ...mapGetters(["wakaList"]),
     correctArrayToList() {
       return function (array) {
         if (array.length > 0 && array[0] !== "") {
@@ -83,26 +80,10 @@ export default {
     },
   },
   methods: {
-    async getAllWakaData() {
-      const database = firebase.database();
-      const waka = "waka";
-      database.ref(waka).on('value', (data) => {
-        if (data) {
-          const wakaList = data.val();
-          let list = [];
-          if(wakaList != null) {
-            Object.keys(wakaList).forEach((val) => {
-              wakaList[val].id = val;
-              list.push(wakaList[val]);
-            })
-          }
-          this.wakaList = wakaList;
-        }
-      });
-    },
+    ...mapActions(["getWakaList"])
   },
   created() {
-    this.getAllWakaData();
+    this.getWakaList();
   }
 }
 </script>

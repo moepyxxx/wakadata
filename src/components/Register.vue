@@ -84,7 +84,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase';
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -105,11 +107,11 @@ export default {
         name : "",
         identifykey : ""
       },
-      wakaList : {},
-      bookList : {},
     }
   },
+  computed: mapGetters(["bookList"]),
   methods: {
+    ...mapActions(["getBookList"]),
     registerWaka() {
       const database = firebase.database();
       const waka = "waka";
@@ -166,23 +168,6 @@ export default {
 
       this.showWarningMessage('すべての下書きをクリアしました。');
     },
-    getAllBookData() {
-      const database = firebase.database();
-      const book = "book";
-      database.ref(book).on('value', (data) => {
-        if (data) {
-          const bookList = data.val();
-          let list = [];
-          if(bookList != null) {
-            Object.keys(bookList).forEach((val) => {
-              bookList[val].id = val;
-              list.push(bookList[val]);
-            })
-          }
-          this.bookList = bookList;
-        }
-      });
-    },
     registerBook() {
       let successFlug = false;
       if (this.bookToRegister.name && this.bookToRegister.identifykey) {
@@ -224,7 +209,7 @@ export default {
     },
   },
   created() {
-    this.getAllBookData();
+    this.getBookList();
   }
 }
 </script>

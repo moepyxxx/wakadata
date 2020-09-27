@@ -116,7 +116,8 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -129,11 +130,10 @@ export default {
       checkKeywordMethod: "and",
       checkAuthorKeyword: [],
       checkMakura: [],
-      wakaList: [],
-      bookList: {},
     }
   },
   computed: {
+    ...mapGetters(["wakaList", "bookList"]),
     correctArrayToList() {
       return function (array) {
         if (array.length > 0 && array[0] !== "") {
@@ -182,8 +182,6 @@ export default {
     },
     filterWakaList() {
 
-      // すべてのデータを取得
-      this.getAllWakaData();
       const wakaList = [];
 
       // 検索開始
@@ -310,6 +308,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["getWakaList", "getBookList"]),
     correctArrayDelimiterBlank(keyword) {
       if (keyword.replaceAll("　", " ").match(/ /)) {
         return keyword.replaceAll("　", " ").split(' ');
@@ -347,40 +346,10 @@ export default {
       }
       return addFlug;
     },
-    getAllWakaData() {
-      const database = firebase.database();
-      const waka = "waka";
-      database.ref(waka).on('value', (data) => {
-        if (data) {
-          const wakaList = data.val();
-          let list = [];
-          if(wakaList != null) {
-            Object.keys(wakaList).forEach((val) => {
-              wakaList[val].id = val;
-              list.push(wakaList[val]);
-            })
-          }
-          this.wakaList = wakaList;
-        }
-      });
-    },
-    getAllBookData() {
-      const database = firebase.database();
-      const book = "book";
-      database.ref(book).on('value', (data) => {
-        if (data) {
-          const bookList = data.val();
-          let list = [];
-          if(bookList != null) {
-            Object.keys(bookList).forEach((val) => {
-              bookList[val].id = val;
-              list.push(bookList[val]);
-            })
-          }
-          this.bookList = bookList;
-        }
-      });
-    },
   },
+  created() {
+    this.getWakaList();
+    this.getBookList();
+  }
 }
 </script>
