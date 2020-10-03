@@ -9,6 +9,7 @@
 
 <script>
 import Footer from './components/Footer.vue'
+// import axios from './axios-auth';
 
 export default {
   name: 'App',

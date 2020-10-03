@@ -184,9 +184,9 @@ export default {
       this.showBookRegisterMenu = false;
 
       if (successFlug) {
-        this.showSuccessMessage('本の登録');
+        this.showSuccessMessage('会員登録');
       } else {
-        this.showErrorMessage('本の登録');
+        this.showErrorMessage('会員登録');
       }
     },
     showSuccessMessage(message) {

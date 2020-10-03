@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["wakaList", "bookList"]),
+    ...mapGetters(["wakaList", "bookList", "loginStatus"]),
     correctArrayToList() {
       return function (array) {
         if (array.length > 0 && array[0] !== "") {

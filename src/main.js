@@ -6,12 +6,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import router from './router'
 import store from "./store"
+import axios from 'axios'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 const firebaseConfig = {
-  apiKey: process.env.VUE_APP_API_KEY,
+  apiKey: "AIzaSyD6zvmsQ9hyXcyqip6HT7WMCSSFJ8Xkjkw",
   authDomain: process.env.VUE_APP_AUTH_DOMAIN,
   databaseURL: "https://wakadata-bbca9.firebaseio.com",
   projectId: process.env.VUE_APP_PROJECT_ID,
@@ -20,6 +21,11 @@ const firebaseConfig = {
   appId: process.env.VUE_APP_APP_ID
 };
 firebase.initializeApp(firebaseConfig);
+
+axios.defaults.baseURL =
+  'https://identitytoolkit.googleapis.com/v1';
+
+store.dispatch('autoLogin');
 
 new Vue({
   router,
